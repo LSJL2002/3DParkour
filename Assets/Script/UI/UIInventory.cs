@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Runtime.Serialization;
+using System.Security.Cryptography;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEditorInternal.Profiling.Memory.Experimental;
@@ -37,6 +38,22 @@ public class UIInventory : MonoBehaviour
         controller = CharacterManager.Instance.Player.controller;
         condition = CharacterManager.Instance.Player.condition;
         dropPosition = CharacterManager.Instance.Player.dropPosition;
+
+        controller.inventory += Toggle;
+        CharacterManager.Instance.Player.addItem += AddItem;
+
+        inventoryWindow.SetActive(false);
+        slots = new ItemSlot[slotPanel.childCount];
+
+        for (int i = 0; i < slots.Length; i++)
+        {
+            slots[i] = slotPanel.GetChild(i).GetComponent<ItemSlot>();
+            slots[i].index = i;
+            slots[i].inventory = this;
+            slots[i].Clear();
+        }
+
+        ClearSelectedItemWindow();
     }
 
     private void ClearSelectedItemWindow()
@@ -189,14 +206,14 @@ public class UIInventory : MonoBehaviour
                         break;
                 }
             }
-            //remove
+            RemoveSelectedItem();
         }
     }
 
     public void OnDropButton()
     {
         ThrowItem(selecetedItem.item);
-        //remove
+        RemoveSelectedItem();
     }
 
     private void RemoveSelectedItem()
@@ -207,7 +224,7 @@ public class UIInventory : MonoBehaviour
         {
             if (slots[selectedItemIndex].equipped)
             {
-                UnEquip(selectedItemIndex);
+                //UnEquip(selectedItemIndex);
             }
 
             selecetedItem.item = null;

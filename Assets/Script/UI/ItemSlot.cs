@@ -16,7 +16,7 @@ public class ItemSlot : MonoBehaviour
     public int index;
     public bool equipped;
     public int quantity;
-    void Start()
+    void Awake()
     {
         outline = GetComponent<Outline>();
     }
