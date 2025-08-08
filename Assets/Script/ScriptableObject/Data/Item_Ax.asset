@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4917a4be9c491a443b7a4fdfcd621e44, type: 3}
-  m_Name: Item_Wood
+  m_Name: Item_Ax
   m_EditorClassIdentifier: 
-  displayName: Wood
-  description: A log
+  displayName: Axe
+  description: It's a sharp Axe
   type: 1
-  icon: {fileID: 21300000, guid: a5612e17f7779374da8564e7a11d823c, type: 3}
-  dropPrefab: {fileID: 1421674853303379767, guid: 7f027a79e2452464aa6c7536f600677f, type: 3}
+  icon: {fileID: 21300000, guid: 06e8d836c76eb494db7ab3784ffcb0eb, type: 3}
+  dropPrefab: {fileID: 4100380876430389863, guid: 2a6567871c666c942a5f9d153c7e59c0, type: 3}
   canStack: 0
   maxStackAmount: 0
   consumables: []
-  equipPrefab: {fileID: 8152299434003605080, guid: 410dc788c80f87449a0e0fb99d8740a5, type: 3}
+  equipPrefab: {fileID: 3701010799638091330, guid: 3005e38a70957df46837648427b9dcca, type: 3}
