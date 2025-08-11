@@ -10,6 +10,9 @@ public class PlayerController : MonoBehaviour
     public float jumpPower;
     public LayerMask groundLayerMask;
     [HideInInspector] public bool isOnTrampoline = false;
+    public float sprintSpeedMuliti = 1.5f;
+    public float sprintStamina = 1f;
+    [HideInInspector] public bool isSprinting = false;
 
     [Header("Look")]
     public Transform cameraContainer;
@@ -48,6 +51,11 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (isSprinting)
+        {
+            CharacterManager.Instance.Player.condition.UseStamina(sprintStamina);
+            Move();
+        }
         Move();
     }
 
@@ -101,6 +109,18 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void onSprintInput(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Performed)
+        {
+            isSprinting = true;
+        }
+        else if (context.phase == InputActionPhase.Canceled)
+        {
+            isSprinting = false;
+        }
+    }
+
 
     public void OnJumpInput(InputAction.CallbackContext context)
     {
@@ -118,11 +138,17 @@ public class PlayerController : MonoBehaviour
 
     private void Move()
     {
+        float speed = moveSpeed;
+        if (isSprinting)
+        {
+            speed *= sprintSpeedMuliti;
+        }
         Vector3 dir = transform.forward * curMovementInput.y + transform.right * curMovementInput.x;
-        dir *= moveSpeed;
+        dir *= speed;
         dir.y = rb.velocity.y;
 
         rb.velocity = dir;
+
     }
 
     void CameraLook()
