@@ -10,6 +10,8 @@ public class Equipment : MonoBehaviour
 
     private PlayerController controller;
     private PlayerCondition condition;
+    public Transform firstPersonEquip; 
+    public Transform thirdPersonEquip;  
 
     void Start()
     {
@@ -20,7 +22,10 @@ public class Equipment : MonoBehaviour
     public void EquipNew(ItemData data)
     {
         UnEquip();
-        curEquip = Instantiate(data.equipPrefab, equipParent).GetComponent<Equip>();
+        var controller = CharacterManager.Instance.Player.controller;
+
+        Transform parent = controller.isThirdPerson ? thirdPersonEquip : firstPersonEquip;
+        curEquip = Instantiate(data.equipPrefab, parent).GetComponent<Equip>();
     }
 
     public void UnEquip()
@@ -32,11 +37,22 @@ public class Equipment : MonoBehaviour
         }
     }
 
+    public void SwitchPerspective(bool toThirdPerson)
+    {
+        if (curEquip == null)
+        {
+            return;
+        }
+
+        Transform newParent = toThirdPerson ? thirdPersonEquip : firstPersonEquip;
+        curEquip.transform.SetParent(newParent);
+    }
+
     public void OnAttackInput(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed && curEquip != null && controller.canLook)
         {
             curEquip.OnAttackInput();
-        } 
+        }
     }
 }

@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     private Vector2 curMovementInput;
     public float jumpPower;
     public LayerMask groundLayerMask;
+    [HideInInspector] public bool isOnTrampoline = false;
 
     [Header("Look")]
     public Transform cameraContainer;
@@ -17,6 +18,13 @@ public class PlayerController : MonoBehaviour
     private float camCurXRot;
     public float lookSensitivity;
 
+    [Header("Camera Views")]
+    public Transform thirdPersonCamPos;
+    private Vector3 firstPersonLoc;
+    private Quaternion firstPersonAng;
+    public bool isThirdPerson = false;
+    public GameObject model;
+    public GameObject equipCamera;
     public Action inventory;
 
     private Vector2 mouseDelta;
@@ -34,6 +42,8 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked; //Wether to lock the mouse or not (Make it invisible)
+        firstPersonLoc = cameraContainer.localPosition;
+        firstPersonAng = cameraContainer.localRotation;
     }
 
     private void FixedUpdate()
@@ -66,11 +76,43 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void OnToggleCameraView(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started)
+        {
+            isThirdPerson = !isThirdPerson;
+
+            if (isThirdPerson)
+            {
+                model.SetActive(true);
+                equipCamera.SetActive(false);
+                cameraContainer.localPosition = thirdPersonCamPos.localPosition;
+                cameraContainer.localRotation = thirdPersonCamPos.localRotation;
+            }
+            else
+            {
+                model.SetActive(false);
+                equipCamera.SetActive(true);
+                cameraContainer.localPosition = firstPersonLoc;
+                cameraContainer.localRotation = firstPersonAng;
+            }
+
+            CharacterManager.Instance.Player.equip.SwitchPerspective(isThirdPerson);
+        }
+    }
+
+
     public void OnJumpInput(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Started && IsGrounded())
         {
-            rb.AddForce(Vector2.up * jumpPower, ForceMode.Impulse);
+            float finalJumpPower = jumpPower;
+
+            if (isOnTrampoline)
+            {
+                finalJumpPower *= 2f;
+            }
+            rb.AddForce(Vector2.up * finalJumpPower, ForceMode.Impulse);
         }
     }
 
@@ -105,7 +147,7 @@ public class PlayerController : MonoBehaviour
 
         for (int i = 0; i < rays.Length; i++)
         {
-            if (Physics.Raycast(rays[i], 0.1f, groundLayerMask))
+            if (Physics.Raycast(rays[i], 0.3f, groundLayerMask))
             {
                 return true;
             }
