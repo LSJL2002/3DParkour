@@ -146,9 +146,7 @@ public class PlayerController : MonoBehaviour
         Vector3 dir = transform.forward * curMovementInput.y + transform.right * curMovementInput.x;
         dir *= speed;
         dir.y = rb.velocity.y;
-
         rb.velocity = dir;
-
     }
 
     void CameraLook()

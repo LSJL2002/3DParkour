@@ -22,8 +22,6 @@ public class Equipment : MonoBehaviour
     public void EquipNew(ItemData data)
     {
         UnEquip();
-        var controller = CharacterManager.Instance.Player.controller;
-
         Transform parent = controller.isThirdPerson ? thirdPersonEquip : firstPersonEquip;
         curEquip = Instantiate(data.equipPrefab, parent).GetComponent<Equip>();
     }
