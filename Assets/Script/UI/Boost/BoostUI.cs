@@ -10,7 +10,7 @@ public class BoostUI : MonoBehaviour
         public GameObject prefab;
     }
 
-    public List<BoostPrefabEntry> boostPrefabs; // assign in inspector
+    public List<BoostPrefabEntry> boostPrefabs;
 
     public Transform boostTimerContainer;
 
@@ -31,7 +31,7 @@ public class BoostUI : MonoBehaviour
     {
         if (activeBoostTimers.ContainsKey(boostType))
         {
-            activeBoostTimers[boostType].StartTimer(boostType.ToString(), duration, () => RemoveBoostTimer(boostType));
+            activeBoostTimers[boostType].StartTimer(duration, () => RemoveBoostTimer(boostType));
         }
         else
         {
@@ -44,7 +44,7 @@ public class BoostUI : MonoBehaviour
             GameObject timerGO = Instantiate(prefab, boostTimerContainer);
             BoostTimerUI timerUI = timerGO.GetComponent<BoostTimerUI>();
             activeBoostTimers.Add(boostType, timerUI);
-            timerUI.StartTimer(boostType.ToString(), duration, () => RemoveBoostTimer(boostType));
+            timerUI.StartTimer(duration, () => RemoveBoostTimer(boostType));
         }
     }
 

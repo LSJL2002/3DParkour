@@ -15,8 +15,8 @@ public class PlayerCondition : MonoBehaviour, IDamagable
     Condition health { get { return uiCondition.health; } }
     Condition stamina { get { return uiCondition.stamina; } }
 
-    public float noHungerHealthDecay;
     public event Action onTakeDamage;
+    private bool isInfiniteStamina = false;
 
     private void Update()
     {
@@ -43,18 +43,35 @@ public class PlayerCondition : MonoBehaviour, IDamagable
         health.Add(amount);
     }
 
-    public void Boost(Func<float> getter, Action<float> setter, float multiplier, float duration)
+    public void Boost(Func<float> getter, Action<float> setter, float multiplier, float duration, BoostType boostType)
     {
-        StartCoroutine(BoostStats(getter, setter, multiplier, duration));
+        StartCoroutine(BoostStats(getter, setter, multiplier, duration, boostType));
     }
 
-    private IEnumerator BoostStats(Func<float> getter, Action<float> setter, float multiplier, float duration)
+    private IEnumerator BoostStats(Func<float> getter, Action<float> setter, float multiplier, float duration, BoostType boostType)
     {
-        float origin = getter();
-        setter(origin * multiplier);
+        if (boostType == BoostType.Stamina)
+        {
+            isInfiniteStamina = true;
+        }
+        else
+        {
+            float origin = getter();
+            setter(origin * multiplier);
+        }
+
         yield return new WaitForSeconds(duration);
 
-        setter(origin);
+        if (boostType == BoostType.Stamina)
+        {
+            isInfiniteStamina = false;
+        }
+        else
+        {
+            float origin = getter();
+            setter(origin);
+        }
+        
     }
 
     public void Die()
@@ -70,10 +87,14 @@ public class PlayerCondition : MonoBehaviour, IDamagable
 
     public bool UseStamina(float amount)
     {
-        if (stamina.curValue - amount < 0)
+        if (isInfiniteStamina)
         {
-            return false;
+            return true;
         }
+        if (stamina.curValue - amount < 0)
+            {
+                return false;
+            }
         stamina.Subtract(amount);
         return true;
     }

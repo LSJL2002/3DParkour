@@ -16,9 +16,10 @@ public enum ConsumableType
 
 public enum BoostType
 {
-    None, 
+    None,
     Speed,
-    Jump
+    Jump,
+    Stamina
 }
 
 [System.Serializable]

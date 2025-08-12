@@ -9,7 +9,7 @@ public class BoostTimerUI : MonoBehaviour
 
     private Coroutine timerCoroutine;
 
-    public void StartTimer(string boostType, float duration, Action onComplete)
+    public void StartTimer(float duration, Action onComplete)
     {
         if (timerCoroutine != null)
             StopCoroutine(timerCoroutine);

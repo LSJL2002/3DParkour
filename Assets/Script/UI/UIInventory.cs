@@ -216,7 +216,8 @@ public class UIInventory : MonoBehaviour
                                     () => controller.moveSpeed,
                                     value => controller.moveSpeed = value,
                                     boost.value,
-                                    boostDuration
+                                    boostDuration,
+                                    BoostType.Speed
                                 );
                                 boostUI.ShowOrRefreshBoostTimer(boost.boostType, boostDuration);
                                 break;
@@ -226,7 +227,18 @@ public class UIInventory : MonoBehaviour
                                     () => controller.jumpPower,
                                     value => controller.jumpPower = value,
                                     boost.value,
-                                    boostDuration
+                                    boostDuration,
+                                    BoostType.Jump
+                                );
+                                boostUI.ShowOrRefreshBoostTimer(boost.boostType, boostDuration);
+                                break;
+                            case BoostType.Stamina:
+                                condition.Boost(
+                                    () => 0f,
+                                    value => { },
+                                    0f,
+                                    boostDuration,
+                                    BoostType.Stamina
                                 );
                                 boostUI.ShowOrRefreshBoostTimer(boost.boostType, boostDuration);
                                 break;
