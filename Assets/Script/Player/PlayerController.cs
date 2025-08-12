@@ -29,6 +29,17 @@ public class PlayerController : MonoBehaviour
     public GameObject model;
     public GameObject equipCamera;
     public Action inventory;
+    [Header("Climbing Walls")]
+    public LayerMask wallLayerMask;
+    public float wallCheckDistance = 0.5f;
+    public float climbSpeed = 3f;
+    public float climbOverHeight = 1.5f;
+    public float climbOverForward = 0.5f;
+    private bool isClimbing = false;
+    private bool isTouchingWall = false;
+    private Vector3 wallNormal;
+    private bool isClimbingOver = false;
+
 
     private Vector2 mouseDelta;
 
@@ -68,6 +79,18 @@ public class PlayerController : MonoBehaviour
         {
             Move();
         }
+
+        CheckWall();
+
+        if (isClimbing)
+        {
+            ClimbingMovement();
+        }
+        else
+        {
+            Move();
+        }
+
     }
 
     private void LateUpdate()
@@ -135,15 +158,25 @@ public class PlayerController : MonoBehaviour
 
     public void OnJumpInput(InputAction.CallbackContext context)
     {
-        if (context.phase == InputActionPhase.Started && IsGrounded())
+        if (context.phase == InputActionPhase.Started)
         {
-            float finalJumpPower = jumpPower;
-
-            if (isOnTrampoline)
+            if (isClimbing)
             {
-                finalJumpPower *= 2f;
+                StopClimbing();
             }
-            rb.AddForce(Vector2.up * finalJumpPower, ForceMode.Impulse);
+            else if (IsGrounded())
+            {
+                float finalJumpPower = jumpPower;
+                if (isOnTrampoline)
+                {
+                    finalJumpPower *= 2f;
+                }
+                rb.AddForce(Vector2.up * finalJumpPower, ForceMode.Impulse);
+            }
+            else if (isTouchingWall)
+            {
+                StartClimbing();
+            }
         }
     }
 
@@ -211,6 +244,59 @@ public class PlayerController : MonoBehaviour
         bool toggle = Cursor.lockState == CursorLockMode.Locked;
         Cursor.lockState = toggle ? CursorLockMode.None : CursorLockMode.Locked;
         canLook = !toggle;
+    }
+
+    private void CheckWall()
+    {
+        Vector3 origin = transform.position + Vector3.up * 0.01f;
+        Vector3 direction = transform.forward;
+
+        if (Physics.Raycast(origin, direction, out RaycastHit hit, wallCheckDistance, wallLayerMask))
+        {
+            isTouchingWall = true;
+            wallNormal = hit.normal;
+        }
+        else
+        {
+            isTouchingWall = false;
+            if (isClimbing)
+            {
+                Vector3 climbOverOffset = Vector3.up * 0.5f + transform.forward * 0.2f;
+                rb.position += climbOverOffset;
+                StopClimbing();
+            }
+        }
+    }
+
+    private void StartClimbing()
+    {
+        isClimbing = true;
+        rb.useGravity = false;
+        rb.velocity = Vector3.zero;
+    }
+
+    private void StopClimbing()
+    {
+        isClimbing = false;
+        rb.useGravity = true;
+    }
+
+    private void ClimbingMovement()
+    {
+        Vector3 vertical = Vector3.up * curMovementInput.y * climbSpeed;
+
+        Vector3 horizontal = Vector3.zero;
+        if (Mathf.Abs(curMovementInput.x) > 0.01f)
+        {
+            Vector3 wallRight = Vector3.Cross(wallNormal, Vector3.up).normalized;
+            horizontal = wallRight * curMovementInput.x * climbSpeed;
+        }
+
+        Vector3 wallStick = -wallNormal * 0.3f;
+
+        rb.velocity = vertical + horizontal;
+
+        rb.position += wallStick * Time.fixedDeltaTime;
     }
 
     //Visual Learning.
