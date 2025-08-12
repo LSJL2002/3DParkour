@@ -6,12 +6,17 @@ public class MovingPlatforms : MonoBehaviour
 {
     public Transform pointA;
     public Transform pointB;
+    private Vector3 pointAPos;
+    private Vector3 pointBPos;
     public float speed = 2f;
     private Vector3 target;
 
+
     private void Start()
     {
-        target = pointB.position; //The end point
+        pointAPos = pointA.position;
+        pointBPos = pointB.position;
+        target = pointBPos;
     }
 
     private void Update()
@@ -20,13 +25,13 @@ public class MovingPlatforms : MonoBehaviour
 
         if (Vector3.Distance(transform.position, target) < 0.1f)
         {
-            if (target == pointB.position)
+            if (target == pointBPos)
             {
-                target = pointA.position;
+                target = pointAPos;
             }
             else
             {
-                target = pointB.position;
+                target = pointBPos;
             }
         }
     }
