@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -40,6 +41,20 @@ public class PlayerCondition : MonoBehaviour, IDamagable
     public void Eat(float amount)
     {
         health.Add(amount);
+    }
+
+    public void Boost(Func<float> getter, Action<float> setter, float multiplier, float duration)
+    {
+        StartCoroutine(BoostStats(getter, setter, multiplier, duration));
+    }
+
+    private IEnumerator BoostStats(Func<float> getter, Action<float> setter, float multiplier, float duration)
+    {
+        float origin = getter();
+        setter(origin * multiplier);
+        yield return new WaitForSeconds(duration);
+
+        setter(origin);
     }
 
     public void Die()

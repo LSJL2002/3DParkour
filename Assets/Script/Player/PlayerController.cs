@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour
     public LayerMask groundLayerMask;
     [HideInInspector] public bool isOnTrampoline = false;
     public float sprintSpeedMuliti = 1.5f;
-    public float sprintStamina = 1f;
+    public float sprintStamina;
     [HideInInspector] public bool isSprinting = false;
 
     [Header("Look")]
@@ -53,10 +53,21 @@ public class PlayerController : MonoBehaviour
     {
         if (isSprinting)
         {
-            CharacterManager.Instance.Player.condition.UseStamina(sprintStamina);
+            bool hasStamina = CharacterManager.Instance.Player.condition.UseStamina(sprintStamina * Time.deltaTime);
+            if (hasStamina)
+            {
+                Move();
+            }
+            else
+            {
+                isSprinting = false;
+                Move();
+            }
+        }
+        else
+        {
             Move();
         }
-        Move();
     }
 
     private void LateUpdate()

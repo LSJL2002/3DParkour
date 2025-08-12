@@ -10,13 +10,23 @@ public enum ItemType
 public enum ConsumableType
 {
     Stamina,
-    Health
+    Health,
+    Boost
+}
+
+public enum BoostType
+{
+    None, 
+    Speed,
+    Jump,
+    Stamina
 }
 
 [System.Serializable]
 public class ItemDataConsumable
 {
     public ConsumableType type;
+    public BoostType boostType; 
     public float value;
 }
 

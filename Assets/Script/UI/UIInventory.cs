@@ -204,6 +204,37 @@ public class UIInventory : MonoBehaviour
                     case ConsumableType.Stamina:
                         condition.Recover(selecetedItem.item.consumables[i].value);
                         break;
+                    case ConsumableType.Boost:
+                        var boost = selecetedItem.item.consumables[i];
+                        switch (boost.boostType)
+                        {
+                            case BoostType.Speed:
+                                condition.Boost(
+                                    () => controller.moveSpeed,
+                                    value => controller.moveSpeed = value,
+                                    boost.value,
+                                    5f
+                                );
+                                break;
+
+                            case BoostType.Jump:
+                                condition.Boost(
+                                    () => controller.jumpPower,
+                                    value => controller.jumpPower = value,
+                                    boost.value,
+                                    5f
+                                );
+                                break;
+                            case BoostType.Stamina:
+                                condition.Boost(
+                                    () => condition.uiCondition.stamina.maxValue,
+                                    value => condition.uiCondition.stamina.maxValue = value,
+                                    boost.value,
+                                    5f
+                                );
+                                break;
+                        }
+                        break;
                 }
             }
             RemoveSelectedItem();
