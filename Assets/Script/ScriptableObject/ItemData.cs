@@ -18,8 +18,7 @@ public enum BoostType
 {
     None, 
     Speed,
-    Jump,
-    Stamina
+    Jump
 }
 
 [System.Serializable]
@@ -49,4 +48,6 @@ public class ItemData : ScriptableObject
 
     [Header("Equip")]
     public GameObject equipPrefab;
+    [Header("Boost Duration")]
+    public int boostDuration;
 }

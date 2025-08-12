@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Item_Donut
   m_EditorClassIdentifier: 
   displayName: Donut
-  description: Recovers Health
+  description: Recovers Health + Boost to JumpPower
   type: 2
   icon: {fileID: 21300000, guid: 9f6f10ecc04eb1a459007e20d5fe7f2b, type: 3}
   dropPrefab: {fileID: 3360937501119532288, guid: 0f82bbe72f30888449d9a2e5b3eeea9b, type: 3}
@@ -21,4 +21,10 @@ MonoBehaviour:
   maxStackAmount: 64
   consumables:
   - type: 1
+    boostType: 0
     value: 20
+  - type: 2
+    boostType: 2
+    value: 2
+  equipPrefab: {fileID: 0}
+  boostDuration: 10

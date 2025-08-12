@@ -27,3 +27,4 @@ MonoBehaviour:
     boostType: 1
     value: 2
   equipPrefab: {fileID: 0}
+  boostDuration: 10

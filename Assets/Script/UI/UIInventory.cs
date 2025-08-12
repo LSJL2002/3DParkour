@@ -32,12 +32,14 @@ public class UIInventory : MonoBehaviour
 
     private PlayerController controller;
     private PlayerCondition condition;
+    private BoostUI boostUI;
 
     void Start()
     {
         controller = CharacterManager.Instance.Player.controller;
         condition = CharacterManager.Instance.Player.condition;
         dropPosition = CharacterManager.Instance.Player.dropPosition;
+        boostUI = FindObjectOfType<BoostUI>();
 
         controller.inventory += Toggle;
         CharacterManager.Instance.Player.addItem += AddItem;
@@ -194,6 +196,7 @@ public class UIInventory : MonoBehaviour
     {
         if (selecetedItem.item.type == ItemType.Consumable)
         {
+            int boostDuration = selecetedItem.item.boostDuration;
             for (int i = 0; i < selecetedItem.item.consumables.Length; i++)
             {
                 switch (selecetedItem.item.consumables[i].type)
@@ -213,8 +216,9 @@ public class UIInventory : MonoBehaviour
                                     () => controller.moveSpeed,
                                     value => controller.moveSpeed = value,
                                     boost.value,
-                                    5f
+                                    boostDuration
                                 );
+                                boostUI.ShowOrRefreshBoostTimer(boost.boostType, boostDuration);
                                 break;
 
                             case BoostType.Jump:
@@ -222,16 +226,9 @@ public class UIInventory : MonoBehaviour
                                     () => controller.jumpPower,
                                     value => controller.jumpPower = value,
                                     boost.value,
-                                    5f
+                                    boostDuration
                                 );
-                                break;
-                            case BoostType.Stamina:
-                                condition.Boost(
-                                    () => condition.uiCondition.stamina.maxValue,
-                                    value => condition.uiCondition.stamina.maxValue = value,
-                                    boost.value,
-                                    5f
-                                );
+                                boostUI.ShowOrRefreshBoostTimer(boost.boostType, boostDuration);
                                 break;
                         }
                         break;
