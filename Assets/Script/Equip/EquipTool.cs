@@ -53,6 +53,10 @@ public class EquipTool : Equip
             {
                 resource.Gather(hit.point, hit.normal);
             }
+            if (doesDealDamage && hit.collider.TryGetComponent<IDamagable>(out IDamagable damagable))
+            {
+                damagable.TakePhysicalDamage(damage);
+            }
         }
     }
 }

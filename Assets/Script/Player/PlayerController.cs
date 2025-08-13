@@ -51,6 +51,7 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        model.SetActive(false);
     }
 
     void Start()

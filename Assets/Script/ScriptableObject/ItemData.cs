@@ -39,6 +39,7 @@ public class ItemData : ScriptableObject
     public ItemType type;
     public Sprite icon;
     public GameObject dropPrefab;
+    public int attackDamage;
 
     [Header("Stacking")]
     public bool canStack;

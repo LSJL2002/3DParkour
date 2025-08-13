@@ -56,22 +56,19 @@ public class PlayerCondition : MonoBehaviour, IDamagable
         }
         else
         {
-            float origin = getter();
-            setter(origin * multiplier);
-        }
+            float originalValue = getter();  // Save original value here
+            setter(originalValue * multiplier);
 
-        yield return new WaitForSeconds(duration);
+            yield return new WaitForSeconds(duration);
+
+            setter(originalValue);  // Restore original value here
+        }
 
         if (boostType == BoostType.Stamina)
         {
+            yield return new WaitForSeconds(duration);
             isInfiniteStamina = false;
         }
-        else
-        {
-            float origin = getter();
-            setter(origin);
-        }
-        
     }
 
     public void Die()

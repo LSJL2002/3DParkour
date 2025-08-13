@@ -37,7 +37,15 @@ public class Interaction : MonoBehaviour
                 {
                     curInteractGameObject = hit.collider.gameObject;
                     curInteractable = hit.collider.GetComponent<IInteractable>();
-                    SetPromptText();
+
+                    if (curInteractable != null)
+                    {
+                        SetPromptText();
+                    }
+                    else
+                    {
+                        promptText.gameObject.SetActive(false);
+                    }
                 }
             }
             else
