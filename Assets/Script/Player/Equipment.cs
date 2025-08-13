@@ -11,12 +11,13 @@ public class Equipment : MonoBehaviour
     private PlayerController controller;
     private PlayerCondition condition;
     public Transform firstPersonEquip; 
-    public Transform thirdPersonEquip;  
+    public Transform thirdPersonEquip;
 
     void Start()
     {
         controller = CharacterManager.Instance.Player.controller;
         condition = CharacterManager.Instance.Player.condition;
+        
     }
 
     public void EquipNew(ItemData data)
