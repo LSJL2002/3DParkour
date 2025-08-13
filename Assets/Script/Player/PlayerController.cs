@@ -248,6 +248,7 @@ public class PlayerController : MonoBehaviour
 
     private void CheckWall()
     {
+        //Ray origin point will be on the bottom of the player.
         Vector3 origin = transform.position + Vector3.up * 0.01f;
         Vector3 direction = transform.forward;
 
@@ -261,6 +262,8 @@ public class PlayerController : MonoBehaviour
             isTouchingWall = false;
             if (isClimbing)
             {
+                //If the player is stil climbing and the raycast does not see a wall anymore it will
+                //Move the player up and to forward instantenously. 
                 Vector3 climbOverOffset = Vector3.up * 0.5f + transform.forward * 0.2f;
                 rb.position += climbOverOffset;
                 StopClimbing();
@@ -283,23 +286,29 @@ public class PlayerController : MonoBehaviour
 
     private void ClimbingMovement()
     {
+        // Vertical climbing movement based on player input (Y axis)
         Vector3 vertical = Vector3.up * curMovementInput.y * climbSpeed;
 
         Vector3 horizontal = Vector3.zero;
         if (Mathf.Abs(curMovementInput.x) > 0.01f)
         {
+            //wallNormal = vector pointing away from the wall's surface
+            //Vector3.up world up ward direction
+            //Both of these combined will give a vector perpendicular to both sideways directions. 
+            //Thus allowing the movement of left and right while sticking on the wall 
             Vector3 wallRight = Vector3.Cross(wallNormal, Vector3.up).normalized;
             horizontal = wallRight * curMovementInput.x * climbSpeed;
         }
 
         Vector3 wallStick = -wallNormal * 0.3f;
 
+        //The movement for going up and down as well as left and right.
         rb.velocity = vertical + horizontal;
 
         rb.position += wallStick * Time.fixedDeltaTime;
     }
 
-    //Visual Learning.
+    //Visual Learning drawing the 4 rays inorder to see where they actually are. 
     // void DrawGroundRays()
     // {
     //     Vector3 origin = transform.position + (transform.up * 0.01f);

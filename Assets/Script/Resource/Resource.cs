@@ -8,7 +8,7 @@ public class Resource : MonoBehaviour
 
     public void Gather(Vector3 hitPoint, Vector3 hitNormal)
     {
-        Debug.Log("Made Log");
+        Debug.Log("Made Resource");
         for (int i = 0; i < quantityPerHit; i++)
         {
             if (capacity <= 0) break;

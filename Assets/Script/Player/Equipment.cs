@@ -29,6 +29,7 @@ public class Equipment : MonoBehaviour
 
     public void UnEquip()
     {
+        //If current equip is not nothing, then when the method is called destroy the current equipment.  
         if (curEquip != null)
         {
             Destroy(curEquip.gameObject);

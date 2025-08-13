@@ -66,7 +66,7 @@ public class PlayerCondition : MonoBehaviour, IDamagable
 
         if (boostType == BoostType.Stamina)
         {
-            yield return new WaitForSeconds(duration);
+            yield return new WaitForSeconds(duration); //Set the bool of isInfinite Stamina for a duration amount of time.
             isInfiniteStamina = false;
         }
     }
@@ -84,7 +84,7 @@ public class PlayerCondition : MonoBehaviour, IDamagable
 
     public bool UseStamina(float amount)
     {
-        if (isInfiniteStamina)
+        if (isInfiniteStamina) //If the bool is true, then stamina will no longer be subtracted.
         {
             return true;
         }
