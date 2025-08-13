@@ -94,6 +94,7 @@ public class UIInventory : MonoBehaviour
     {
         ItemData data = CharacterManager.Instance.Player.itemData;
 
+        //// If the item can be stacked, try adding to an existing stack
         if (data.canStack)
         {
             ItemSlot slot = GetItemStack(data);
@@ -107,7 +108,7 @@ public class UIInventory : MonoBehaviour
         }
 
         ItemSlot emptySlot = getEmptySlot();
-
+        //If no Stack is found just put it into an empty slot. 
         if (emptySlot != null)
         {
             emptySlot.item = data;
@@ -116,7 +117,7 @@ public class UIInventory : MonoBehaviour
             CharacterManager.Instance.Player.itemData = null;
             return;
         }
-
+        //if the Inventory is full, drop the item
         ThrowItem(data);
         CharacterManager.Instance.Player.itemData = null;
     }
@@ -138,6 +139,7 @@ public class UIInventory : MonoBehaviour
 
     ItemSlot GetItemStack(ItemData data)
     {
+        //Find a slot with the same item, and is not at max capacity. 
         for (int i = 0; i < slots.Length; i++)
         {
             if (slots[i].item == data && slots[i].quantity < data.maxStackAmount)
@@ -162,6 +164,7 @@ public class UIInventory : MonoBehaviour
 
     public void ThrowItem(ItemData data)
     {
+        //Make the item drop on the transform postion of the player
         Instantiate(data.dropPrefab, dropPosition.position, Quaternion.Euler(Vector3.one * Random.value * 360));
     }
 
@@ -183,9 +186,13 @@ public class UIInventory : MonoBehaviour
 
         for (int i = 0; i < selecetedItem.item.consumables.Length; i++)
         {
+            //Display all consumable stats
             selectedStatName.text += selecetedItem.item.consumables[i].type.ToString() + "\n";
             selectedStatValue.text += selecetedItem.item.consumables[i].value.ToString() + "\n";
         }
+        // iF the item is a consubmable then set active
+        // If the item is eqiupable then show the equip button
+        // If 
         useButton.SetActive(selecetedItem.item.type == ItemType.Consumable);
         equipButton.SetActive(selecetedItem.item.type == ItemType.Equipable && !slots[index].equipped);
         unequipButton.SetActive(selecetedItem.item.type == ItemType.Equipable && slots[index].equipped);
