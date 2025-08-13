@@ -38,7 +38,6 @@ public class PlayerController : MonoBehaviour
     private bool isClimbing = false;
     private bool isTouchingWall = false;
     private Vector3 wallNormal;
-    private bool isClimbingOver = false;
 
 
     private Vector2 mouseDelta;
